@@ -1,0 +1,347 @@
+/* Anonymous Sharing landing page.
+   Uses only the WellBridge design tokens from src/index.css (colours, radii,
+   shadows, focus ring, easing) and the shared .wb-container, .wb-hero-bg,
+   .wb-glass, .wb-float-shape and .wb-lift classes, so it matches the rest of
+   the app. The app-wide orange hover in index.css also applies to the action
+   cards (.wb-lift) and feature cards (.feature-card). Class names are
+   prefixed "as-" so they cannot affect any other page. */
+
+.anonymous-sharing-page {
+  padding-top: 4rem; /* height of the fixed navbar */
+  background-color: rgb(var(--wb-bg));
+  color: rgb(var(--wb-text));
+}
+
+/* ---------------------------------------------------------------- Hero */
+.as-hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding: 4.5rem 0 4rem;
+  border-bottom: 1px solid rgb(var(--wb-border) / 0.4);
+  text-align: center;
+}
+
+.as-hero-shapes {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.as-shape-one {
+  width: 13rem;
+  height: 13rem;
+  top: 2rem;
+  left: -4rem;
+}
+
+.as-shape-two {
+  width: 8rem;
+  height: 8rem;
+  right: 10%;
+  bottom: 1.5rem;
+}
+
+.as-hero-inner {
+  max-width: 60rem;
+}
+
+.as-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0 0 1.25rem;
+  padding: 0.375rem 1rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: rgb(var(--wb-text-muted));
+}
+
+.as-eyebrow svg {
+  color: rgb(var(--wb-primary));
+}
+
+.as-hero-title {
+  margin: 0;
+  font-size: clamp(2rem, 1.4rem + 2.4vw, 3rem);
+  line-height: 1.15;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: rgb(var(--wb-text));
+}
+
+.as-hero-title span {
+  color: rgb(var(--wb-primary));
+}
+
+.as-hero-text {
+  max-width: 40rem;
+  margin: 1.25rem auto 0;
+  font-size: 1.125rem;
+  line-height: 1.75;
+  color: rgb(var(--wb-text-muted));
+}
+
+/* -------------------------------------------------------- Action cards */
+.as-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.25rem;
+  margin-top: 2.75rem;
+  text-align: left;
+}
+
+.as-action-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.125rem;
+  padding: 1.5rem;
+  border: 1px solid rgb(var(--wb-border));
+  border-top: 4px solid rgb(var(--wb-primary));
+  border-radius: var(--wb-radius-lg);
+  background: linear-gradient(180deg, rgb(var(--wb-surface)) 0%, rgb(var(--wb-subtle)) 100%);
+  box-shadow: inset 0 1px 0 rgb(var(--wb-surface)), var(--wb-shadow);
+  color: rgb(var(--wb-text));
+  text-decoration: none;
+}
+
+.as-action-card--secondary {
+  border-top-color: rgb(var(--wb-primary) / 0.45);
+}
+
+.as-action-card:focus-visible {
+  outline: none;
+  box-shadow: var(--wb-focus-ring);
+}
+
+.as-action-icon {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: var(--wb-radius);
+  font-size: 1.25rem;
+}
+
+.as-action-card--primary .as-action-icon {
+  background: linear-gradient(180deg, rgb(var(--wb-primary)) 0%, rgb(var(--wb-primary-hover)) 100%);
+  color: rgb(var(--wb-surface));
+  box-shadow: var(--wb-shadow-btn);
+}
+
+.as-action-card--secondary .as-action-icon {
+  background: rgb(var(--wb-primary-soft));
+  color: rgb(var(--wb-primary));
+  border: 1px solid rgb(var(--wb-primary) / 0.2);
+}
+
+.as-action-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  min-width: 0;
+}
+
+.as-action-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.as-action-text {
+  font-size: 0.975rem;
+  line-height: 1.6;
+  color: rgb(var(--wb-text-muted));
+}
+
+.as-action-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+  font-weight: 600;
+  color: rgb(var(--wb-primary));
+}
+
+.as-action-arrow {
+  transition: transform 250ms var(--wb-ease);
+}
+
+/* ------------------------------------------------------------ Sections */
+.as-section {
+  padding-top: 4rem;
+}
+
+.as-section--last {
+  padding-bottom: 4.5rem;
+}
+
+.as-section-title {
+  margin: 0 0 2rem;
+  text-align: center;
+  font-size: clamp(1.375rem, 1.2rem + 0.8vw, 1.875rem);
+  line-height: 1.25;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: rgb(var(--wb-text));
+}
+
+.as-card-title {
+  margin: 0 0 0.5rem;
+  font-size: 1.125rem;
+  line-height: 1.35;
+  font-weight: 600;
+  color: rgb(var(--wb-text));
+}
+
+.as-card-text {
+  margin: 0;
+  font-size: 0.975rem;
+  line-height: 1.6;
+  color: rgb(var(--wb-text-muted));
+}
+
+/* ------------------------------------------------------- Feature cards */
+.as-features-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1.25rem;
+}
+
+.as-feature-card {
+  padding: 1.5rem;
+  border: 1px solid rgb(var(--wb-border));
+  border-radius: var(--wb-radius-lg);
+  background: rgb(var(--wb-surface));
+  box-shadow: var(--wb-shadow-sm);
+  transition: transform 250ms var(--wb-ease), box-shadow 250ms var(--wb-ease);
+}
+
+.as-feature-card:hover {
+  box-shadow: var(--wb-shadow);
+}
+
+.as-feature-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  margin-bottom: 1rem;
+  border-radius: var(--wb-radius);
+  background: rgb(var(--wb-primary-soft));
+  border: 1px solid rgb(var(--wb-primary) / 0.15);
+}
+
+.as-feature-icon .feature-icon {
+  font-size: 1.25rem;
+  color: rgb(var(--wb-primary));
+}
+
+/* ---------------------------------------------------------- Guidelines */
+.as-guidelines {
+  padding: 3rem 2.5rem;
+  border: 1px solid rgb(var(--wb-border));
+  border-radius: var(--wb-radius-lg);
+  background: rgb(var(--wb-subtle));
+}
+
+.as-guidelines-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: as-guideline;
+}
+
+.as-guideline {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1.25rem;
+  border: 1px solid rgb(var(--wb-border));
+  border-radius: var(--wb-radius);
+  background: rgb(var(--wb-surface));
+  box-shadow: var(--wb-shadow-sm);
+  counter-increment: as-guideline;
+}
+
+/* Visual number only; the <ol> already conveys the order. */
+.as-guideline::before {
+  content: counter(as-guideline);
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 9999px;
+  background: rgb(var(--wb-primary));
+  color: rgb(var(--wb-surface));
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+/* -------------------------------------------------------------- Motion */
+@media (prefers-reduced-motion: no-preference) {
+  .as-feature-card:hover {
+    transform: translateY(-3px);
+  }
+
+  .as-action-card:hover .as-action-arrow,
+  .as-action-card:focus-visible .as-action-arrow {
+    transform: translateX(4px);
+  }
+}
+
+/* ---------------------------------------------------------- Responsive */
+@media (max-width: 1024px) {
+  .as-features-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .as-hero {
+    padding: 3rem 0 2.75rem;
+  }
+
+  .as-hero-text {
+    font-size: 1.0625rem;
+  }
+
+  .as-actions,
+  .as-guidelines-list {
+    grid-template-columns: 1fr;
+  }
+
+  .as-section {
+    padding-top: 3rem;
+  }
+
+  .as-guidelines {
+    padding: 2rem 1.25rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .as-features-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .as-action-card {
+    padding: 1.25rem;
+    gap: 0.875rem;
+  }
+
+  .as-action-icon {
+    width: 2.75rem;
+    height: 2.75rem;
+  }
+}

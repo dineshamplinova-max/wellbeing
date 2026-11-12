@@ -1,0 +1,133 @@
+.anonymous-posts {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.search-bar {
+  margin-bottom: 2rem;
+}
+
+.search-input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid rgb(var(--wb-border));
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.posts-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.post-card {
+  background: rgb(var(--wb-surface));
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 4px rgb(var(--wb-text) / 0.1);
+  position: relative;
+}
+
+.post-id {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: rgb(var(--wb-subtle));
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  color: rgb(var(--wb-text-muted));
+}
+
+.post-card h3 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-size: 1.25rem;
+  color: rgb(var(--wb-text));
+}
+
+.post-tags {
+  margin: 1rem 0;
+}
+
+.tag {
+  display: inline-block;
+  background: rgb(var(--wb-border));
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  margin-right: 0.5rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.875rem;
+  color: rgb(var(--wb-text));
+}
+
+.post-date {
+  color: rgb(var(--wb-text-muted));
+  font-size: 0.875rem;
+  margin-bottom: 1rem;
+}
+
+.comments-section {
+  margin-top: 1.5rem;
+  border-top: 1px solid rgb(var(--wb-border));
+  padding-top: 1rem;
+}
+
+.comment {
+  background: rgb(var(--wb-subtle));
+  padding: 0.75rem;
+  border-radius: 4px;
+  margin-bottom: 0.75rem;
+}
+
+.comment p {
+  margin: 0;
+  margin-bottom: 0.25rem;
+}
+
+.comment small {
+  color: rgb(var(--wb-text-muted));
+  font-size: 0.75rem;
+}
+
+.add-comment textarea {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid rgb(var(--wb-border));
+  border-radius: 4px;
+  margin-bottom: 0.5rem;
+  min-height: 80px;
+  resize: vertical;
+}
+
+.comment-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+button {
+  background-color: rgb(var(--wb-primary));
+  color: rgb(var(--wb-surface));
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.875rem;
+}
+
+button:hover {
+  background-color: rgb(var(--wb-primary-hover));
+}
+
+.add-comment-btn {
+  width: 100%;
+  margin-top: 0.5rem;
+}
+
+@media (max-width: 768px) {
+  .posts-container {
+    grid-template-columns: 1fr;
+  }
+}

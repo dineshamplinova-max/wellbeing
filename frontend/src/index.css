@@ -1,0 +1,521 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ---------------------------------------------------------------------------
+   WellBridge design tokens (white, black, blue and green theme)
+   Colours are stored as RGB channels so Tailwind can apply opacity
+   (see tailwind.config.js, which exposes them as wb-* utilities, e.g.
+   bg-wb-primary, text-wb-muted). Components and CSS files use only these.
+
+   Contrast notes (WCAG 2.2, on white):
+   - text #171717 17.9:1; text-muted #525252 7.8:1.
+   - primary #2563EB 5.2:1 (links, icons); white on primary 5.2:1 (buttons).
+   - accent #16A34A is 3.3:1: indicators, icons, borders and large text only.
+     Green text and white-on-green buttons use accent-hover #15803D (5.0:1).
+   - danger #DC2626 4.8:1.
+   - border #E5E7EB is decorative (1.2:1). Form controls use control
+     #737373 (4.7:1) so their outline meets the 3:1 non-text minimum; this is
+     the one neutral outside the brand table, kept for accessibility.
+   ------------------------------------------------------------------------- */
+:root {
+  --wb-primary: 37 99 235;        /* #2563EB primary blue: actions, links, focus */
+  --wb-primary-hover: 29 78 216;  /* #1D4ED8 dark blue: hover and pressed states */
+  --wb-primary-soft: 239 246 255; /* #EFF6FF light blue backgrounds */
+  --wb-accent: 22 163 74;         /* #16A34A primary green: positive indicators */
+  --wb-accent-hover: 21 128 61;   /* #15803D dark green: green text, green buttons */
+  --wb-accent-soft: 240 253 244;  /* #F0FDF4 light green backgrounds */
+  --wb-bg: 255 255 255;           /* #FFFFFF page background */
+  --wb-surface: 255 255 255;      /* #FFFFFF cards */
+  --wb-subtle: 248 250 252;       /* #F8FAFC muted background */
+  --wb-text: 23 23 23;            /* #171717 primary text */
+  --wb-text-muted: 82 82 82;      /* #525252 secondary text */
+  --wb-border: 229 231 235;       /* #E5E7EB borders and dividers */
+  --wb-control: 115 115 115;      /* #737373 form-control outlines (see notes) */
+  --wb-danger: 220 38 38;         /* #DC2626 errors */
+  --wb-danger-hover: 185 28 28;   /* #B91C1C hover for destructive buttons */
+
+  /* Light orange hover for cards and buttons (see "Orange hover" below).
+     Hover text #9A3412 on #FFEDD5 is 6.4:1; body text on #FFF7ED is 7:1 or more. */
+  --wb-hover-card-bg: 255 247 237; /* #FFF7ED hovered card background */
+  --wb-hover-btn-bg: 255 237 213;  /* #FFEDD5 hovered button background */
+  --wb-hover-border: 253 186 116;  /* #FDBA74 hovered border (decorative) */
+  --wb-hover-text: 154 52 18;      /* #9A3412 hovered button text */
+
+  --wb-font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+
+  --wb-radius-sm: 0.5rem;
+  --wb-radius: 0.875rem;
+  --wb-radius-lg: 1.25rem;
+
+  /* Depth: soft layered shadows with a faint blue tint, never pure black. */
+  --wb-shadow-sm: 0 1px 2px rgb(var(--wb-text) / 0.05), 0 1px 3px rgb(var(--wb-primary) / 0.06);
+  --wb-shadow:
+    0 1px 2px rgb(var(--wb-text) / 0.04),
+    0 4px 8px -2px rgb(var(--wb-text) / 0.06),
+    0 14px 28px -10px rgb(var(--wb-primary) / 0.16);
+  --wb-shadow-lg:
+    0 2px 4px rgb(var(--wb-text) / 0.04),
+    0 12px 24px -6px rgb(var(--wb-text) / 0.08),
+    0 30px 50px -18px rgb(var(--wb-primary) / 0.26);
+  --wb-shadow-btn:
+    inset 0 1px 0 rgb(var(--wb-surface) / 0.22),
+    0 1px 2px rgb(var(--wb-text) / 0.12),
+    0 8px 16px -6px rgb(var(--wb-primary) / 0.5);
+  --wb-shadow-btn-accent:
+    inset 0 1px 0 rgb(var(--wb-surface) / 0.22),
+    0 1px 2px rgb(var(--wb-text) / 0.12),
+    0 8px 16px -6px rgb(var(--wb-accent) / 0.5);
+  --wb-focus-ring: 0 0 0 3px rgb(var(--wb-surface)), 0 0 0 5px rgb(var(--wb-primary));
+  --wb-ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+body {
+  margin: 0;
+  font-family: var(--wb-font-sans);
+  line-height: 1.6;
+  color: rgb(var(--wb-text));
+  background-color: rgb(var(--wb-bg));
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+@layer base {
+  /* Visible keyboard focus everywhere; mouse clicks do not show it. */
+  :focus-visible {
+    outline: 2px solid rgb(var(--wb-primary));
+    outline-offset: 2px;
+  }
+
+  ::selection {
+    background-color: rgb(var(--wb-primary) / 0.18);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Component classes
+   ------------------------------------------------------------------------- */
+@layer components {
+  /* Layout */
+  .wb-container {
+    width: 100%;
+    max-width: 72rem;
+    margin-inline: auto;
+    padding-inline: 1rem;
+  }
+  @media (min-width: 640px) {
+    .wb-container { padding-inline: 1.5rem; }
+  }
+  @media (min-width: 1024px) {
+    .wb-container { padding-inline: 2rem; }
+  }
+
+  .wb-page {
+    min-height: 100vh;
+    padding-block: 2rem;
+    background-color: rgb(var(--wb-bg));
+  }
+  @media (min-width: 768px) {
+    .wb-page { padding-block: 3rem; }
+  }
+
+  /* Elevated card: white surface, light border, layered soft shadow and a
+     faint top highlight that gives the edge a little thickness. */
+  .wb-card {
+    background:
+      linear-gradient(180deg, rgb(var(--wb-surface)) 0%, rgb(var(--wb-subtle)) 100%);
+    border: 1px solid rgb(var(--wb-border));
+    border-radius: var(--wb-radius-lg);
+    box-shadow: inset 0 1px 0 rgb(var(--wb-surface)), var(--wb-shadow);
+    padding: 1.25rem;
+    transition: transform 250ms var(--wb-ease), box-shadow 250ms var(--wb-ease);
+  }
+  @media (min-width: 640px) {
+    .wb-card { padding: 1.75rem; }
+  }
+  .wb-card:hover { box-shadow: inset 0 1px 0 rgb(var(--wb-surface)), var(--wb-shadow-lg); }
+
+  .wb-surface-soft {
+    background-color: rgb(var(--wb-primary-soft));
+    border: 1px solid rgb(var(--wb-primary) / 0.1);
+    border-radius: var(--wb-radius);
+    box-shadow: inset 0 1px 0 rgb(var(--wb-surface) / 0.8), var(--wb-shadow-sm);
+  }
+
+  /* Typography */
+  .wb-h1 {
+    font-size: clamp(1.75rem, 1.4rem + 1.5vw, 2.5rem);
+    line-height: 1.2;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: rgb(var(--wb-text));
+  }
+  .wb-h2 {
+    font-size: clamp(1.375rem, 1.2rem + 0.8vw, 1.875rem);
+    line-height: 1.25;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: rgb(var(--wb-text));
+  }
+  .wb-h3 {
+    font-size: 1.25rem;
+    line-height: 1.35;
+    font-weight: 600;
+    color: rgb(var(--wb-text));
+  }
+  .wb-body { font-size: 1rem; line-height: 1.6; color: rgb(var(--wb-text)); }
+  .wb-muted { color: rgb(var(--wb-text-muted)); }
+
+  .wb-link {
+    color: rgb(var(--wb-primary));
+    font-weight: 500;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .wb-link:hover {
+    color: rgb(var(--wb-primary-hover));
+    text-decoration-color: rgb(var(--wb-accent));
+  }
+
+  /* Blue, not green: it also marks urgent notices (e.g. "If you are in
+     immediate danger"), and green is reserved for positive states. */
+  .wb-highlight {
+    border-left: 4px solid rgb(var(--wb-primary));
+    padding-left: 0.875rem;
+  }
+
+  /* Small status label for positive or completed states. */
+  .wb-badge-success {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.125rem 0.625rem;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: rgb(var(--wb-accent-hover));
+    background-color: rgb(var(--wb-accent-soft));
+    border: 1px solid rgb(var(--wb-accent) / 0.25);
+  }
+
+  /* Progress bars and meters: a blue-to-green fill with a soft inner depth. */
+  .wb-progress {
+    height: 0.625rem;
+    border-radius: 9999px;
+    background-color: rgb(var(--wb-subtle));
+    box-shadow: inset 0 1px 2px rgb(var(--wb-text) / 0.1);
+    overflow: hidden;
+  }
+  .wb-progress-bar {
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, rgb(var(--wb-primary)), rgb(var(--wb-accent)));
+    box-shadow: inset 0 1px 0 rgb(var(--wb-surface) / 0.35);
+    transition: width 400ms var(--wb-ease);
+  }
+
+  /* Buttons: raised with a soft shadow; lift on hover, press on click. */
+  .wb-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 2.75rem; /* 44px touch target */
+    padding: 0.625rem 1.25rem;
+    border: 1px solid transparent;
+    border-radius: var(--wb-radius);
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.25;
+    text-decoration: none;
+    cursor: pointer;
+    transition:
+      background-color 150ms ease, border-color 150ms ease, color 150ms ease,
+      box-shadow 200ms var(--wb-ease), transform 200ms var(--wb-ease);
+  }
+  .wb-btn:focus-visible {
+    outline: none;
+    box-shadow: var(--wb-focus-ring);
+  }
+
+  .wb-btn-primary {
+    background: linear-gradient(180deg, rgb(var(--wb-primary)) 0%, rgb(var(--wb-primary-hover)) 100%);
+    color: rgb(var(--wb-surface));
+    box-shadow: var(--wb-shadow-btn);
+  }
+  .wb-btn-primary:hover { background: rgb(var(--wb-primary-hover)); }
+
+  .wb-btn-accent {
+    background-color: rgb(var(--wb-accent-hover));
+    color: rgb(var(--wb-surface));
+    box-shadow: var(--wb-shadow-btn-accent);
+  }
+
+  .wb-btn-secondary {
+    background-color: rgb(var(--wb-surface));
+    color: rgb(var(--wb-primary));
+    border-color: rgb(var(--wb-primary) / 0.45);
+    box-shadow: var(--wb-shadow-sm);
+  }
+  .wb-btn-secondary:hover {
+    background-color: rgb(var(--wb-primary-soft));
+    border-color: rgb(var(--wb-primary));
+  }
+
+  /* Disabled: flat, dimmed and a not-allowed cursor, not colour alone. */
+  .wb-btn:disabled,
+  .wb-btn[aria-disabled="true"] {
+    background: rgb(var(--wb-border));
+    border-color: rgb(var(--wb-border));
+    color: rgb(var(--wb-text-muted));
+    box-shadow: none;
+    transform: none;
+    cursor: not-allowed;
+  }
+
+  /* Forms */
+  .wb-label {
+    display: block;
+    margin-bottom: 0.375rem;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: rgb(var(--wb-text));
+  }
+
+  .wb-input {
+    display: block;
+    width: 100%;
+    min-height: 2.75rem;
+    padding: 0.625rem 0.875rem;
+    font-size: 1rem; /* 16px avoids zoom-on-focus on iOS */
+    color: rgb(var(--wb-text));
+    background-color: rgb(var(--wb-surface));
+    border: 1px solid rgb(var(--wb-control));
+    border-radius: var(--wb-radius-sm);
+    box-shadow: inset 0 1px 2px rgb(var(--wb-text) / 0.05);
+    transition: border-color 150ms ease, box-shadow 150ms ease;
+  }
+  .wb-input::placeholder { color: rgb(var(--wb-text-muted)); }
+  .wb-input:focus {
+    outline: none;
+    border-color: rgb(var(--wb-primary));
+    box-shadow: 0 0 0 3px rgb(var(--wb-primary) / 0.25);
+  }
+  .wb-input:disabled {
+    background-color: rgb(var(--wb-subtle));
+    cursor: not-allowed;
+  }
+  /* Invalid fields get a thicker border as well as the error colour. */
+  .wb-input[aria-invalid="true"] {
+    border-color: rgb(var(--wb-danger));
+    border-width: 2px;
+  }
+
+  .wb-help {
+    margin-top: 0.375rem;
+    font-size: 0.875rem;
+    color: rgb(var(--wb-text-muted));
+  }
+
+  /* Pair with role="alert" or aria-describedby; the message text itself
+     explains the problem, so colour is never the only signal. */
+  .wb-error {
+    margin-top: 0.375rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: rgb(var(--wb-danger));
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Layered surfaces (hero and feature sections). Glass surfaces stay mostly
+   opaque so text keeps the contrast above; without backdrop-filter support
+   they turn almost solid. Movement only runs when the user has not asked for
+   reduced motion, and tilt only with a fine pointer that can hover.
+   ------------------------------------------------------------------------- */
+@layer components {
+  .wb-glass,
+  .wb-glass-soft {
+    border: 1px solid rgb(var(--wb-surface) / 0.8);
+    box-shadow:
+      inset 0 1px 0 rgb(var(--wb-surface) / 0.9),
+      0 0 0 1px rgb(var(--wb-border) / 0.9),
+      var(--wb-shadow);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+    backdrop-filter: blur(14px) saturate(140%);
+  }
+  .wb-glass { background-color: rgb(var(--wb-surface) / 0.85); }
+  .wb-glass-soft { background-color: rgb(var(--wb-primary-soft) / 0.7); }
+
+  @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    .wb-glass { background-color: rgb(var(--wb-surface) / 0.97); }
+    .wb-glass-soft { background-color: rgb(var(--wb-primary-soft) / 0.95); }
+  }
+
+  /* Hero: white behind the text, soft blue and green light on the decorative side. */
+  .wb-hero-bg {
+    background:
+      radial-gradient(circle at 85% 15%, rgb(var(--wb-primary) / 0.12), transparent 45%),
+      radial-gradient(circle at 75% 90%, rgb(var(--wb-accent) / 0.1), transparent 45%),
+      linear-gradient(180deg, rgb(var(--wb-surface)) 0%, rgb(var(--wb-subtle)) 100%);
+  }
+
+  /* Decorative floating shapes: place inside a relative, overflow-hidden
+     container with aria-hidden="true". */
+  .wb-float-shape {
+    position: absolute;
+    border-radius: 9999px;
+    pointer-events: none;
+    filter: blur(2px);
+    opacity: 0.6;
+  }
+  .wb-float-shape-blue {
+    background: radial-gradient(circle at 30% 30%, rgb(var(--wb-primary-soft)), rgb(var(--wb-primary) / 0.35));
+  }
+  .wb-float-shape-green {
+    background: radial-gradient(circle at 30% 30%, rgb(var(--wb-accent-soft)), rgb(var(--wb-accent) / 0.3));
+  }
+
+  .wb-tilt,
+  .wb-lift {
+    transition: transform 250ms var(--wb-ease), box-shadow 250ms var(--wb-ease);
+  }
+  .wb-tilt:hover,
+  .wb-tilt:focus-within,
+  .wb-lift:hover,
+  .wb-lift:focus-visible {
+    box-shadow:
+      inset 0 1px 0 rgb(var(--wb-surface) / 0.9),
+      0 0 0 1px rgb(var(--wb-primary) / 0.2),
+      var(--wb-shadow-lg);
+  }
+}
+
+@keyframes wb-rise {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes wb-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Gentle entrance for cards and layered sections. `backwards` (not `both`)
+     so that once it ends the animation no longer holds `transform`, leaving
+     hover lift and parallax free to work. */
+  .wb-card,
+  .wb-glass,
+  .wb-glass-soft,
+  .wb-rise {
+    animation: wb-rise 500ms var(--wb-ease) backwards;
+  }
+
+  .wb-float-shape { animation: wb-float 9s ease-in-out infinite; }
+  .wb-float-shape:nth-of-type(2n) { animation-duration: 12s; animation-delay: -3s; }
+
+  /* Decorative parallax: --px/--py (-0.5..0.5) are set from pointer position. */
+  .wb-parallax {
+    transform: translate3d(calc(var(--px, 0) * var(--depth, 12px)), calc(var(--py, 0) * var(--depth, 12px)), 0);
+    transition: transform 400ms ease-out;
+  }
+
+  .wb-card:hover,
+  .wb-lift:hover,
+  .wb-lift:focus-visible,
+  .wb-tilt:focus-within {
+    transform: translateY(-3px);
+  }
+
+  .wb-btn:not(:disabled):not([aria-disabled="true"]):hover { transform: translateY(-1px); }
+  .wb-btn:not(:disabled):not([aria-disabled="true"]):active {
+    transform: translateY(1px);
+    box-shadow: var(--wb-shadow-sm);
+  }
+}
+
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  /* --rx/--ry are set from pointer position, capped at a few degrees. */
+  .wb-tilt:hover {
+    transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateY(-6px);
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Orange hover for every card and button.
+
+   - Only on devices with a real hover pointer, so touch screens never get a
+     "stuck" hover state.
+   - !important is used on purpose, and only inside :hover. One definition here
+     wins over the many component hover rules (e.g. .control-btn.start:hover)
+     instead of repeating it in each CSS file, and moving the pointer away
+     restores every element's own styling.
+   - transform is never set here, so the 3D lift and press effects stay.
+     Buttons keep their outline and box-shadow, so keyboard focus rings stay
+     blue and visible.
+   - Colour transitions only run when reduced motion is not requested.
+
+   Cards: the shared card classes, the component card classes, and
+   .wb-hover-card for Tailwind-styled cards. Decorative parallax panels and the
+   small hero label are left alone.
+   Buttons: <button>, role="button", input buttons, .wb-btn, the component
+   link-button classes, and .wb-hover-btn for Tailwind-styled links and
+   navigation items.
+   ------------------------------------------------------------------------- */
+@media (hover: hover) and (pointer: fine) {
+  :is(.wb-card, .wb-glass, .wb-glass-soft, .wb-surface-soft, .wb-lift, .wb-tilt, .wb-hover-card,
+    .feature-card, .journal-card, .med-card, .post-card, .stat-item, .summary-card):not(.wb-parallax):not(p):hover {
+    background-color: rgb(var(--wb-hover-card-bg)) !important;
+    background-image: none !important;
+    border-color: rgb(var(--wb-hover-border)) !important;
+    box-shadow:
+      0 0 0 1px rgb(var(--wb-hover-border)),
+      0 2px 4px rgb(var(--wb-text) / 0.04),
+      0 12px 24px -6px rgb(var(--wb-hover-text) / 0.12),
+      0 28px 48px -18px rgb(var(--wb-hover-border) / 0.55) !important;
+  }
+
+  :is(button, [role="button"], input[type="submit"], input[type="button"], input[type="reset"],
+    .wb-btn, .wb-hover-btn, .primary-btn, .secondary-btn, .edit-profile-btn, .read-more-btn,
+    .create-journal-btn, .start-journal-btn, .back-home):not(:disabled):not([aria-disabled="true"]):hover {
+    background-color: rgb(var(--wb-hover-btn-bg)) !important;
+    background-image: none !important;
+    border-color: rgb(var(--wb-hover-border)) !important;
+    color: rgb(var(--wb-hover-text)) !important;
+  }
+  /* Icons inside a hovered button follow its text colour. */
+  :is(button, [role="button"], .wb-btn, .wb-hover-btn, .primary-btn, .secondary-btn, .edit-profile-btn,
+    .read-more-btn, .create-journal-btn, .start-journal-btn, .back-home):not(:disabled):not([aria-disabled="true"]):hover svg {
+    color: inherit !important;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  :is(.wb-card, .wb-glass, .wb-glass-soft, .wb-surface-soft, .wb-lift, .wb-tilt, .wb-hover-card,
+    .feature-card, .journal-card, .med-card, .post-card, .stat-item, .summary-card,
+    button, [role="button"], input[type="submit"], input[type="button"], input[type="reset"],
+    .wb-btn, .wb-hover-btn, .primary-btn, .secondary-btn, .edit-profile-btn, .read-more-btn,
+    .create-journal-btn, .start-journal-btn, .back-home):not(.wb-parallax) {
+    transition-property: background-color, border-color, color, box-shadow, transform !important;
+    transition-duration: 250ms !important;
+    transition-timing-function: var(--wb-ease) !important;
+  }
+}

@@ -1,0 +1,36 @@
+gitignore
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Environment files (contain secrets)
+.env
+.env.*
+!.env.example
+
+# Backend environment files
+/backend/.env
+/backend/.env.*
+!/backend/.env.example
+
+# User uploaded files
+/backend/uploads/
+/backend/upload1/
+
+# Build output
+/frontend/build/
+/backend/dist/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Python virtual environment
+/backend/test/
+
+# Backup folders
+/backups/
+
+# OS files
+.DS_Store
+Thumbs.db
