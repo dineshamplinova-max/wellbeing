@@ -1,6 +1,6 @@
 import 'dotenv/config';
 import http from 'http';
-import { createApp } from './app.js';
+import { createApp } from './createApp.js';
 import Connection from './database/db.js';
 import { findConfigProblems } from './config/env.js';
 import { resolveAssistantMode } from './services/assistant/provider.js';

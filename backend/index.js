@@ -1,5 +1,6 @@
 
-import { createApp } from './app.js';
+import express from 'express';
+import { createApp } from './createApp.js';
 import Connection from './database/db.js';
 
 let connectionPromise;
